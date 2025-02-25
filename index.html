@@ -342,7 +342,7 @@ function updateClock() {
     let ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12 || 12;
 
-    let formattedTime = ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} ${ampm} | ${dayName};
+    let formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} ${ampm} | ${dayName}`;
     document.getElementById("clock").textContent = formattedTime;
 }
 
@@ -415,13 +415,13 @@ async function loadOrders() {
         results = results.map(order => {
             let imageHTML = "";
 
-            // ✅ *Single Image (file)*
+            // ✅ **Single Image (file)**
             let singleImage = order.get("file");
             if (singleImage && typeof singleImage.url === "function") {
                 imageHTML += `<img src="${singleImage.url()}" width="100"> `;
             }
 
-            // ✅ *Multiple Images (array)*
+            // ✅ **Multiple Images (array)**
             let multipleImages = order.get("images"); // Yeh array hai jo multiple images rakhta hai
             if (multipleImages && Array.isArray(multipleImages)) {
                 multipleImages.forEach(img => {
@@ -442,7 +442,7 @@ async function loadOrders() {
                 status: order.get("status") || "PENDING"
             };
         })
-        // ✅ *Sort by Due Date (Nearest Due Date First)*
+        // ✅ **Sort by Due Date (Nearest Due Date First)**
         .sort((a, b) => a.dueDate - b.dueDate);
 
         let cartHTML = "<h2>Your Orders</h2>";
@@ -462,7 +462,7 @@ async function loadOrders() {
                     <button class="btn1" id="frame-${order.objectId}" onclick="updateStatus('${order.objectId}', 'FRAME READY')" ${order.status !== 'PENDING' ? 'style="display:none;"' : ''}>
                         Frame Ready
                     </button>
-                    <button class="btn2" id="sofa-${order.objectId}" onclick="updateStatus('${order.objectId}', 'SOFA READY ✔')" ${order.status !== 'FRAME READY' ? 'style="display:none;"' : ''}>
+                    <button class="btn2" id="sofa-${order.objectId}" onclick="updateStatus('${order.objectId}', 'SOFA READY ✔️')" ${order.status !== 'FRAME READY' ? 'style="display:none;"' : ''}>
                         Sofa Ready
                     </button>
                 </div>
@@ -489,7 +489,7 @@ function getStatusClass(status) {
     switch (status) {
         case "PENDING": return "status-pending";
         case "FRAME READY": return "status-frame-ready";
-        case "SOFA READY ✔": return "status-sofa-ready";
+        case "SOFA READY ✔️": return "status-sofa-ready";
         default: return "";
     }
 }
@@ -512,14 +512,14 @@ async function updateStatus(objectId, newStatus) {
             await order.save();
 
             // ✅ UI Update
-            let statusElement = document.getElementById(status-${objectId});
-            let frameButton = document.getElementById(frame-${objectId});
-            let sofaButton = document.getElementById(sofa-${objectId});
-            let orderElement = document.getElementById(order-${objectId}); // ✅ Order Element Fetch
+            let statusElement = document.getElementById(`status-${objectId}`);
+            let frameButton = document.getElementById(`frame-${objectId}`);
+            let sofaButton = document.getElementById(`sofa-${objectId}`);
+            let orderElement = document.getElementById(`order-${objectId}`); // ✅ Order Element Fetch
 
             if (statusElement) {
                 statusElement.textContent = newStatus;
-                statusElement.className = status ${getStatusClass(newStatus)};
+                statusElement.className = `status ${getStatusClass(newStatus)}`;
             }
 
             // ✅ Button Text & Visibility Update
@@ -527,7 +527,7 @@ async function updateStatus(objectId, newStatus) {
                 frameButton.style.display = "none";  // Hide "Frame Ready"
                 sofaButton.style.display = "inline-block"; // Show "Sofa Ready"
             } 
-            else if (newStatus === "SOFA READY ✔") {
+            else if (newStatus === "SOFA READY ✔️") {
                 sofaButton.style.display = "none";  // Hide "Sofa Ready"
 
                 console.log("✅ Order will be removed after 10 sec:", objectId);
@@ -577,7 +577,7 @@ function formatDate(dateString) {
     let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     let month = monthNames[date.getMonth()];
     let year = date.getFullYear();
-    return ${day}/${month}/${year};
+    return `${day}/${month}/${year}`;
 }
 
 /* ---------- Navbar Active Link Highlight ---------- */
@@ -672,4 +672,20 @@ function enableButtons() {
     const buttons = document.querySelectorAll(".btn1, .btn2");
     buttons.forEach(button => {
         button.disabled = false;
-        butt
+        button.style.cursor = "pointer";
+        button.style.opacity = "1"; // ✅ Opacity wapas normal karo
+        button.removeEventListener("click", showToast);
+    });
+}
+</script>
+
+
+
+  <div class="footers">
+    <p>
+      Created By Yusuf Khan 
+    </p>
+  </div>
+</body>
+</html>
+
