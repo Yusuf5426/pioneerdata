@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="blue">
+    <title>Submit Details</title>
+    <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            color: #000;
+        }
+
+        h1 {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 24px;
+            
+        }
+
+     
+
+        .container {
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 4px 12px;
+            margin-top: 50px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 28px;
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+            text-align:left;
+        }
+
+        input[type="text"], input[type="date"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+            margin-bottom: 20px;
+        }
+
+        .submit-btn {
+            background-color: #ff8979;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 22px;
+        }
+
+        .submit-btn:hover {
+            background-color: #000000;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+        }
+       
+        input[type="file"] {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius:5px ;
+        }
+        
+        input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    margin-bottom: 20px;
+}
+input[type="date"]:focus {
+    border-color: #ff8979;
+    background-color: #f9f9f9;
+    outline: none; 
+
+input[type="date"]::-webkit-calendar-picker-indicator 
+    background-color: #ff8979;
+    border-radius: 5px;
+}
+
+input[type="date"]:disabled {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+.loader {
+    border-top: 8px solid #3498db; 
+    border-right: 8px solid #f70000; 
+    border-bottom: 8px solid #e20404; 
+    border-left: 8px solid #000000; 
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: spin 2s linear infinite;
+    display: none;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+        .submit-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        h2{
+            text-align: center;
+        }
+
+        /* Loading animation */
+        .loader {
+            display: none;
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin: 0;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Alert Modal Styles */
+        .alert-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .alert-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 300px;
+        }
+
+        .alert-content button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .alert-content button:hover {
+            background-color: #0056b3;
+        }
+        label[for="checkbox"] {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: normal;
+    color: #555;
+}
+input[type="checkbox"] {
+    vertical-align: middle;
+}
+        .footers{
+    color:black;
+    position: fixed;
+    bottom:0;
+    left:0;
+}
+.footers p{
+    font-family:Cursive;
+    text-shadow:2px 2px 5px red;
+}
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>PIONEER FURNITURE</h1>
+    </header>
+    <!-- End Header Section -->
+
+<div class="container">
+    <form action="" id="submitForm">
+        <h2>Pioneer Login</h2>
+        <label for="billn">Bill No.</label>
+        <input type="text" id="billn" name="billn" required placeholder="Type Bill No...">
+
+        <label for="details">Details</label>
+        <textarea id="details" name="details" rows="4" placeholder="Type Size Clothes Etc..."></textarea>
+
+        <label for="dueDate">Due Date</label>
+        <input type="date" name="dueDate" id="dueDate" required>
+        <br>
+
+        <label for="imageUpload">Upload Image:</label>
+        <input type="file" id="imageUpload" name="imageUpload" multiple>
+        <br><br>
+
+        <label for="checkbox">Urgent</label>
+        <input type="checkbox" name="urgent" id="checkbox">
+        <br><br>
+        <button type="submit" class="submit-btn">Submit Order</button>
+    </form>
+
+    <!-- Loading Animation -->
+    <div id="loader" class="loader"></div>
+</div>
+
+<!-- Custom Alert Modal -->
+<div id="custom-alert" class="alert-modal">
+    <div class="alert-content">
+        <span id="alert-message"></span>
+        <button onclick="closeAlert()">OK</button>
+    </div>
+</div>
+
+<script>
+    // Set the default date to today's date
+    const currentDate = new Date().toISOString().split('T')[0];
+    document.getElementById('dueDate').value = currentDate;
+
+    // Handle form submission
+document.getElementById('submitForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    // Show the loading animation
+    document.getElementById('loader').style.display = "block";
+    document.querySelector('.submit-btn').disabled = true;
+
+    const Order = Parse.Object.extend("Orders");
+    const order = new Order();
+
+    order.set("billNumber", document.getElementById('billn').value);
+    order.set("details", document.getElementById('details').value);
+    order.set("dueDate", new Date(document.getElementById('dueDate').value));
+    order.set("urgent", document.getElementById('checkbox').checked);
+
+    // *Handling Multiple Images*
+    let fileInput = document.getElementById('imageUpload').files;
+    let fileArray = [];
+
+    for (let i = 0; i < fileInput.length; i++) {
+        let parseFile = new Parse.File(fileInput[i].name, fileInput[i]);
+        await parseFile.save(); // Save each file separately
+        fileArray.push(parseFile); // Push to array
+    }
+
+    if (fileArray.length > 0) {
+        order.set("images", fileArray); // Save array of images in Parse
+    }
+
+    try {
+        await order.save();
+        showAlert("Order submitted successfully with multiple images!");
+    } catch (error) {
+        showAlert("There was an error submitting your order.");
+    } finally {
+        // Hide loading animation and enable submit button
+        document.getElementById('loader').style.display = "none";
+        document.querySelector('.submit-btn').disabled = false;
+    }
+});
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/parse/3.4.3/parse.min.js"></script>
+<script>
+    Parse.initialize("ZplkGt31jAygD6lYfS0QtTWA9BVVcWYYuavsXSbd", "YEZy7qplfvNG4oAzFY6B6J7h6xuXU1mw5zdnhESE"); // Replace with Back4App credentials
+    Parse.serverURL = "https://parseapi.back4app.com/";
+</script>
+<div class="footers">
+    <p>
+        Created By Yusuf Khan 
+    </p>
+</body>
+</html>
