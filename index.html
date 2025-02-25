@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="blue">
+  <title>Pioneer Furniture Order's</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/3.4.3/parse.min.js"></script>
+  <style>
+
+  * { 
+    padding: 0; 
+    margin: 0;
+     }
+     
+    body { font-family: 'Arial', sans-serif;
+            background-color:#ffffff ;
+            color: #000;
+            }
+   /* navbar css start */
+   
+    .navbar {
+      display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 50px;
+        background-color: #333;
+        padding: 10px 0;
+    }
+    .navbar a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+        font-size: 18px;
+        transition: 0.2s;
+        cursor: pointer;
+    }
+    .navbar a:hover { 
+        color:blue;
+        color: #3910f1;
+         }
+  .authbtn {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    color: #fff;
+    margin: 0 10px;
+    transition: 0.2s;
+    cursor: pointer;
+    font-weight:bold;
+}
+     h1{
+           background-color: #333;
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 24px;
+            margin: 0;
+            text-align:center;
+  }
+  /* navbar end*/
+  
+  /* time Start */
+    .time {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      font-size: 20px;
+      margin-top: 10px; 
+      font-weight: bold; 
+      
+    }
+   /* time  End*/
+    .toggle-btn {
+      padding: 10px 20px;
+      background-color: #333; 
+      color: #fff;
+      border: none; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      font-size: 18px; 
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    
+    .toggle-btn:hover {
+     background-color: #444;
+      }
+    
+   /* cart design*/
+   
+    #cartContainer { 
+    margin: 20px auto; 
+    padding: 10px; 
+    max-width: 800px; 
+    }
+    
+    /* cart end*/
+    
+    /* Cart Items */
+    
+    .cart-item {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);   
+      padding: 15px;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .cart-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    
+    .cart-item img {
+      max-width: 100%; 
+      width: 100%; 
+      height: auto; 
+      border-radius: 4px;
+      margin-top: 10px;
+      border: 1px solid blue;
+    }
+    /* cart p start */
+    .cart-item p {
+                 margin: 8px 0; 
+                 font-size: 16px; 
+     }
+     
+     /* cart end */
+     
+    .cart-item hr {
+     margin: 15px 0; 
+     border: none; 
+     border-top: 1px solid #eee;
+      }
+      
+  
+    /* Buttons */
+    
+    .btn1, .btn2 {
+      height: 50px; 
+      width: 48%; 
+      display: inline-block; 
+      text-align: center;
+      border: none;
+      border-radius: 25px;
+      color:#0ff;
+      cursor:pointer;
+      text-transform: uppercase;
+      background: transparent;
+      transient:0.3s ease-in-out;
+      text-align:center;
+      }
+      
+      .btn1, .btn2:hover{
+          color:#000;
+          background:0ff;
+          box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+    }
+    
+    .btn1 { 
+    background-color: #007bff; 
+    font-size: 19px; 
+    font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    .btn2 { 
+    font-size: 19px; 
+    background-color: #28a745;
+    font-family: Arial, Helvetica, sans-serif;
+     }
+    
+    /* Status Labels */
+    
+    .status { 
+           font-weight: bold; 
+           padding: 5px 10px; 
+           border-radius: 5px; 
+    }
+    /* status  css start*/
+    
+    .status-pending { 
+              background-color: orange;
+              color: white;
+               }
+               
+    .status-frame-ready { 
+             background-color: blue; 
+             color: white; 
+             
+             }
+             
+    .status-sofa-ready { 
+              background-color: green; 
+              color: white;
+              
+     }
+     /* button  end*/
+     
+    /* Highlight for orders ready for history */
+    .highlight {
+      border: 2px solid #ff0;
+      box-shadow: 0 0 15px rgba(255,255,0,0.8);
+    }
+    
+    /* Popup for User Role */
+    .popup {
+      display: flex; 
+      justify-content: center; 
+      align-items: center;
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      right: 0; 
+      bottom: 0;
+      background: rgba(0,0,0,0.5); 
+      z-index: 1000;
+    }
+    
+    .popup-content {
+      border:1px solid #fff;
+      backdrop-filter:blur(20px);
+      box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 55);
+      padding: 20px; 
+      border-radius: 8px; 
+      text-align: center;
+    }
+    
+    .popup button {
+      padding: 10px 20px;
+      margin: 10px; 
+      border-radius: 5px;
+      font-weight: bold; 
+      border: none; 
+      font-size: 16px; 
+      cursor: pointer;
+      transition: 
+      box-shadow 0.3s ease-in-out;
+    }
+    .popup button:hover {
+      box-shadow: 0 0 15px rgba(4,170,109,1);
+      background-color:blue;
+    }
+    
+    /* order button start*/
+    
+      .add-order-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.add-order-btn:hover {
+  background-color: #0056b3;
+  transient:0.3s ease-in-out;
+      box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+}
+/* order button end*/
+.navbar a.active {
+    color: #f39c12; 
+    border-bottom: 2px solid #f39c12;
+}
+.popup-content h2{
+    color:#fff;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+}
+h2{
+    text-align:center;
+}
+    .footers{
+    color:black;
+    position: fixed;
+    bottom:0;
+    left:0;
+}
+.footers p{
+    font-family:Cursive;
+    text-shadow:2px 2px 5px red;
+}
+  </style>
+</head>
+<body>
+     <!-- Header Section -->
+    <header>
+        <h1>PIONEER FURNITURE</h1>
+    </header>
+    <!-- End Header Section -->
+  <!-- Navbar -->
+<!-- Navbar -->
+<div class="navbar">
+    <a href="home.html">Home</a>
+    <a href="history.html">History</a>
+    <a href="gallery.html">Gallery</a>
+<!-- ✅ Navbar Me Auth Button -->
+<button id="authBtn" class="authbtn">Auth</button>
+</div>
+  <!-- Time Display -->
+  <div class="time" id="clock">00:00:00 AM/PM Sunday</div>
+
+  <!-- Cart Container -->
+  <div id="cartContainer"></div>
+
+
+<button class="add-order-btn" onclick="window.location.href = 'Submit.html';">
+  Add Order
+</button>
+<!-- ✅ Add This Popup In Your HTML -->
+<div id="userPopup" class="popup" style="display: none;">
+    <div class="popup-content">
+        <h2>Select Role</h2>
+        <button onclick="setUserRole('guest')">Guest</button>
+        <button onclick="setUserRole('author')">Author</button>
+    </div>
+</div>
+
+<script>
+// ✅ Global variable for user role
+let userRole = null;
+
+/* ---------- Time Management ---------- */
+function updateClock() {
+    let now = new Date();
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    let seconds = now.getSeconds();
+    let dayIndex = now.getDay();  // 🟢 Day Index (0-6)
+    let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    
+    // ✅ Ensure dayIndex is valid
+    let dayName = days[dayIndex] || "Unknown";
+
+    let ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+
+    let formattedTime = ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} ${ampm} | ${dayName};
+    document.getElementById("clock").textContent = formattedTime;
+}
+
+// ✅ Har second update hoga
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+<script>
+
+/* ---------- User Role Popup (AUTH Button Click) ---------- */
+document.getElementById("authBtn").addEventListener("click", () => {
+    document.getElementById("userPopup").style.display = "flex";
+});
+
+function setUserRole(role) {
+    if (role === "guest") {
+        userRole = "guest";
+        localStorage.setItem("role", "guest");
+        alert("You are in guest mode. You can't take any action.");
+        disableButtons();
+    } else if (role === "author") {
+        let id = prompt("Enter ID (Default: Admin):", "Admin");
+        let pass = prompt("Enter Password (❌❌❌):", "");
+        if (id === "Admin" && pass === "1234") {
+            userRole = "author";
+            localStorage.setItem("role", "author");
+            alert("Welcome, Author! You can take action.");
+            enableButtons();
+        } else {
+            alert("Invalid credentials. You will be treated as guest.");
+            userRole = "guest";
+            localStorage.setItem("role", "guest");
+            disableButtons();
+        }
+    }
+    // ✅ Popup hide after role selection
+    document.getElementById("userPopup").style.display = "none";
+}
+
+/* ---------- Disable & Enable Buttons ---------- */
+function disableButtons() {
+    const buttons = document.querySelectorAll(".btn1, .btn2");
+    buttons.forEach(button => {
+        button.disabled = true;
+        button.style.cursor = "not-allowed";
+        button.style.opacity = "0.1"
+    });
+}
+
+function enableButtons() {
+    const buttons = document.querySelectorAll(".btn1, .btn2");
+    buttons.forEach(button => {
+        button.disabled = false;
+        button.style.cursor = "pointer";
+        button.style.opacity = "1"
+    });
+}
+
+/* ---------- Load Orders From Back4App ---------- */
+async function loadOrders() {
+    Parse.initialize("ZplkGt31jAygD6lYfS0QtTWA9BVVcWYYuavsXSbd", "YEZy7qplfvNG4oAzFY6B6J7h6xuXU1mw5zdnhESE");
+    Parse.serverURL = "https://parseapi.back4app.com/";
+    
+    const Order = Parse.Object.extend("Orders");
+    const query = new Parse.Query(Order);
+
+    try {
+        let results = await query.find();
+
+        results = results.map(order => {
+            let imageHTML = "";
+
+            // ✅ *Single Image (file)*
+            let singleImage = order.get("file");
+            if (singleImage && typeof singleImage.url === "function") {
+                imageHTML += `<img src="${singleImage.url()}" width="100"> `;
+            }
+
+            // ✅ *Multiple Images (array)*
+            let multipleImages = order.get("images"); // Yeh array hai jo multiple images rakhta hai
+            if (multipleImages && Array.isArray(multipleImages)) {
+                multipleImages.forEach(img => {
+                    if (img && typeof img.url === "function") {
+                        imageHTML += `<img src="${img.url()}" width="100"> `;
+                    }
+                });
+            }
+
+            return {
+                objectId: order.id,
+                billNumber: order.get("billNumber"),
+                details: order.get("details"),
+                dueDate: new Date(order.get("dueDate")),  // ✅ Convert to Date Object
+                formattedDueDate: formatDate(order.get("dueDate")),
+                urgent: order.get("urgent") ? "🔴 Urgent" : "✅ Normal",
+                image: imageHTML, // ✅ Image HTML
+                status: order.get("status") || "PENDING"
+            };
+        })
+        // ✅ *Sort by Due Date (Nearest Due Date First)*
+        .sort((a, b) => a.dueDate - b.dueDate);
+
+        let cartHTML = "<h2>Your Orders</h2>";
+        results.forEach(order => {
+            let statusClass = getStatusClass(order.status);
+            cartHTML += `
+                <div class="cart-item" id="order-${order.objectId}">
+                    <p><strong style="color:red;">Status:</strong> 
+                        <span id="status-${order.objectId}" class="status ${statusClass}">${order.status}</span>
+                    </p>
+                    <p><strong style="color:red;">Bill No:</strong> ${order.billNumber}</p>
+                    <p><strong style="color:red;">Details:</strong> ${order.details}</p>
+                    <p><strong style="color:red;">Due Date:</strong> ${order.formattedDueDate}</p>
+                    <p><strong style="color:red;">Time:</strong> ${order.urgent}</p>
+                    <p>${order.image}</p> <!-- ✅ Multiple images properly show hongi -->
+                    <hr>
+                    <button class="btn1" id="frame-${order.objectId}" onclick="updateStatus('${order.objectId}', 'FRAME READY')" ${order.status !== 'PENDING' ? 'style="display:none;"' : ''}>
+                        Frame Ready
+                    </button>
+                    <button class="btn2" id="sofa-${order.objectId}" onclick="updateStatus('${order.objectId}', 'SOFA READY ✔')" ${order.status !== 'FRAME READY' ? 'style="display:none;"' : ''}>
+                        Sofa Ready
+                    </button>
+                </div>
+            `;
+        });
+
+// ✅ Load orders function ko call karo
+setTimeout(loadOrders, 500);
+        document.getElementById("cartContainer").innerHTML = cartHTML;
+        
+        if (userRole !== "author") { 
+            disableButtons(); 
+        } else { 
+            enableButtons(); 
+        }
+
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+    }
+}
+
+// ✅ Status ke liye CSS class return karega
+function getStatusClass(status) {
+    switch (status) {
+        case "PENDING": return "status-pending";
+        case "FRAME READY": return "status-frame-ready";
+        case "SOFA READY ✔": return "status-sofa-ready";
+        default: return "";
+    }
+}
+
+/* ---------- Update Order Status Function ---------- */
+async function updateStatus(objectId, newStatus) {
+    if (userRole !== "author") {
+        alert("Guests cannot perform actions.");
+        return;
+    }
+
+    let Order = Parse.Object.extend("Orders");
+    let query = new Parse.Query(Order);
+    query.equalTo("objectId", objectId);
+
+    try {
+        let order = await query.first();
+        if (order) {
+            order.set("status", newStatus);
+            await order.save();
+
+            // ✅ UI Update
+            let statusElement = document.getElementById(status-${objectId});
+            let frameButton = document.getElementById(frame-${objectId});
+            let sofaButton = document.getElementById(sofa-${objectId});
+            let orderElement = document.getElementById(order-${objectId}); // ✅ Order Element Fetch
+
+            if (statusElement) {
+                statusElement.textContent = newStatus;
+                statusElement.className = status ${getStatusClass(newStatus)};
+            }
+
+            // ✅ Button Text & Visibility Update
+            if (newStatus === "FRAME READY") {
+                frameButton.style.display = "none";  // Hide "Frame Ready"
+                sofaButton.style.display = "inline-block"; // Show "Sofa Ready"
+            } 
+            else if (newStatus === "SOFA READY ✔") {
+                sofaButton.style.display = "none";  // Hide "Sofa Ready"
+
+                console.log("✅ Order will be removed after 10 sec:", objectId);
+                
+                // ✅ 2 Sec Ke Baad Cart Remove Karo
+                setTimeout(async () => {
+                    if (orderElement) {
+                        orderElement.remove(); // ✅ Cart hatao
+                        console.log("✅ Order removed from UI:", objectId);
+                        
+                        // ✅ Order ko History me Save Karo (NO IMAGE)
+                        await moveOrderToHistory(order);
+                    }
+                }, 2000);
+            }
+        }
+    } catch (error) {
+        console.error("❌ Error updating order:", error);
+    }
+}
+
+
+/* ------- Move Order to History  ---------- */
+async function moveOrderToHistory(order) {
+    const HistoryOrder = Parse.Object.extend("HistoryOrders");
+    let historyEntry = new HistoryOrder();
+
+    historyEntry.set("billNumber", order.get("billNumber"));
+    historyEntry.set("moveDate", new Date());
+
+    try {
+        await historyEntry.save();
+        console.log("✅ Order moved to History");
+        
+        // ✅ Original Order Delete Karo
+        await order.destroy();
+        console.log("✅ Original Order Deleted");
+    } catch (error) {
+        console.error("❌ Error moving to history:", error);
+    }
+}
+
+/* ---------- Format Date ---------- */
+function formatDate(dateString) {
+    let date = new Date(dateString);
+    let day = String(date.getDate()).padStart(2, "0");
+    let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let month = monthNames[date.getMonth()];
+    let year = date.getFullYear();
+    return ${day}/${month}/${year};
+}
+
+/* ---------- Navbar Active Link Highlight ---------- */
+window.onload = function() {
+    var navLinks = document.querySelectorAll('.navbar a');
+    navLinks.forEach(function(link) {
+        if (link.href === window.location.href) {
+            link.classList.add('active');
+        }
+    });
+};
+
+// ✅ Load orders after a short delay so that role selection is processed
+setTimeout(loadOrders, 500);
+
+// ✅ Disable button par tap hone par notification dikhane ka function
+function showAuthNotification(event) {
+    alert("You are Not Authenticate People"); // ✅ Alert message
+    event.preventDefault(); // ✅ Default action ko rokne ke liye
+}
+
+// ✅ Disable hone wale buttons par event listener add karo
+function attachDisableButtonListeners() {
+    const buttons = document.querySelectorAll(".btn1:disabled, .btn2:disabled");
+    buttons.forEach(button => {
+        button.addEventListener("click", showAuthNotification);
+    });
+}
+
+// ✅ Disable buttons function ko update karo
+function disableButtons() {
+    const buttons = document.querySelectorAll(".btn1, .btn2");
+    buttons.forEach(button => {
+        button.disabled = true;
+        button.style.cursor = "not-allowed";
+        button.style.opacity = "0.5"; // ✅ Opacity kam karo
+        button.addEventListener("click", showAuthNotification); // ✅ Event listener add karo
+    });
+}
+
+// ✅ Enable buttons function ko update karo
+function enableButtons() {
+    const buttons = document.querySelectorAll(".btn1, .btn2");
+    buttons.forEach(button => {
+        button.disabled = false;
+        button.style.cursor = "pointer";
+        button.style.opacity = "1"; // ✅ Opacity wapas normal karo
+        button.removeEventListener("click", showAuthNotification); // ✅ Event listener remove karo
+    });
+}
+// ✅ Toast Notification Function
+function showToast(message) {
+    let toast = document.createElement("div");
+    toast.className = "toast show";
+    toast.innerText = message;
+    document.body.appendChild(toast);
+
+    // ✅ 3 Seconds ke baad hide aur remove ho jayega
+    setTimeout(() => {
+        toast.classList.add("hide");
+        setTimeout(() => toast.remove(), 500); 
+    }, 3000);
+}
+
+// ✅ Disable hone wale buttons par event listener add karo
+function attachDisableButtonListeners() {
+    const buttons = document.querySelectorAll(".btn1:disabled, .btn2:disabled");
+    buttons.forEach(button => {
+        button.addEventListener("click", (event) => {
+            showToast("You are Not Authenticate People"); // ✅ Toast Notification
+            event.preventDefault(); // ✅ Default click action ko rokna
+        });
+    });
+}
+
+// ✅ Disable buttons function ko update karo
+function disableButtons() {
+    const buttons = document.querySelectorAll(".btn1, .btn2");
+    buttons.forEach(button => {
+        button.disabled = true;
+        button.style.cursor = "not-allowed";
+        button.style.opacity = "0.5"; // ✅ Opacity kam karo
+        button.addEventListener("click", (event) => {
+            showToast("You are Not Authenticate People"); // ✅ Mobile-friendly notification
+            event.preventDefault();
+        });
+    });
+}
+
+// ✅ Enable buttons function ko update karo
+function enableButtons() {
+    const buttons = document.querySelectorAll(".btn1, .btn2");
+    buttons.forEach(button => {
+        button.disabled = false;
+        butt
