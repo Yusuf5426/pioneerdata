@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#007bff">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/3.0.0/parse.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>History Page</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      background-color: #333;
+      color: white;
+      padding: 10px 0;
+    }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .navbar a:hover {
+      background-color: #0056b3;
+    }
+    .container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      
+    }
+    h2 {
+      text-align: center;
+      font-size:25px;
+      margin-bottom: 20px;
+      
+    }
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      
+    }
+    .history-item {
+      background-color: white;
+      padding: 15px;
+      border-radius: 5px;
+      transition: transform 0.3s;
+      position: relative;
+      box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    }
+    .history-item:hover {
+      transform: scale(1.02);
+    }
+    .history-item p {
+      font-size: 16px;
+      margin: 5px 0;
+      
+    }
+    .history-item strong {
+      color: #555;
+      
+    }
+    .date {
+      font-size: 14px;
+      color: gray;
+    }
+    .upload-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .upload-container input[type="file"] {
+      display: none;
+    }
+    .upload-container label {
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .upload-container label:hover {
+      background-color: #0056b3;
+    }
+    .upload-container img {
+      max-width: 150px;
+      max-height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left:auto;
+      margin-bottom:10px;
+      border:1px solid blue;
+    }
+    .upload-container label.disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+      opacity:0.5px;
+    }
+
+    /* Full Image Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 5px;
+    }
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 40px;
+      color: white;
+      cursor: pointer;
+    }
+    .billn{
+        background-color: green; 
+              color: white;
+              padding:2px;
+              border-radius:5px;
+    }
+    h1 {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    margin: 0;
+    text-align: center;
+    position: relative;
+}
+.footers{
+    color:#fff;
+    position: fixed;
+    bottom:0;
+    left:0;
+}
+.footers p{
+    font-family:Cursive;
+    text-shadow:2px 2px 5px red;
+}
+    
+  </style>
+</head>
+<body>
+    <header>
+        <h1 data-text="Pioneer Furniture">Pioneer History</h1>
+    </header>
+  <nav class="navbar">
+    <a href="https://pioneerfurnituredata.netlify.app/">Home</a>
+  </nav>
+  <div class="container">
+    <h2>History of Orders</h2>
+    <div class="history-list" id="historyList">
+      <!-- History items will be dynamically added here -->
+    </div>
+  </div>
+
+  <!-- Modal for Full Image -->
+  <div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img id="fullImage" />
+  </div>
+
+  <script>
+    // 🔹 Parse Backend Initialize
+    Parse.initialize("ZplkGt31jAygD6lYfS0QtTWA9BVVcWYYuavsXSbd", "YEZy7qplfvNG4oAzFY6B6J7h6xuXU1mw5zdnhESE");
+    Parse.serverURL = "https://parseapi.back4app.com/";
+
+    // 🔹 Load History Data
+    async function loadHistory() {
+      const HistoryOrder = Parse.Object.extend("HistoryOrders");
+      const query = new Parse.Query(HistoryOrder);
+      
+      try {
+        let results = await query.find();
+        let historyHTML = "";
+
+        results.forEach(order => {
+          const billNumber = order.get("billNumber");
+          const readyDate = new Date(order.get("moveDate"));
+          const formattedReadyDate = ${String(readyDate.getDate()).padStart(2, "0")}/${String(readyDate.getMonth() + 1).padStart(2, "0")}/${readyDate.getFullYear()};
+          const imageUrl = order.get("imageUrl");
+          const isImageUploaded = !!imageUrl;
+
+          historyHTML += `
+            <div class="history-item" data-bill-number="${billNumber}">
+              <p><strong>Bill Number:</strong><span class="billn">${billNumber}</span></p>
+              <p><strong>Ready Date:</strong> <span class="date">${formattedReadyDate}</span></p>
+              <div class="upload-container">
+                <label for="fileInput${billNumber}" class="${isImageUploaded ? 'disabled' : ''}">Upload Image</label>
+                <input type="file" id="fileInput${billNumber}" accept="image/*" onchange="handleFileUpload(this, '${billNumber}')" ${isImageUploaded ? 'disabled' : ''}>
+                <img src="${imageUrl || ''}" alt="Uploaded Image" class="uploaded-image" style="${isImageUploaded ? 'display: block;' : 'display: none;'}" onclick="openModal('${imageUrl}')">
+              </div>
+            </div>
+          `;
+        });
+
+        document.getElementById("historyList").innerHTML = historyHTML;
+      } catch (error) {
+        console.error("❌ Error loading history:", error);
+      }
+    }
+
+    // 🔹 Upload Image Function
+    async function handleFileUpload(input, billNumber) {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async function (e) {
+          try {
+            const HistoryOrder = Parse.Object.extend("HistoryOrders");
+            const query = new Parse.Query(HistoryOrder);
+            query.equalTo("billNumber", billNumber);
+            const order = await query.first();
+
+            if (order) {
+              const parseFile = new Parse.File("image.jpg", { base64: e.target.result });
+              await parseFile.save();
+              order.set("imageUrl", parseFile.url());
+              await order.save();
+              loadHistory();
+            } else {
+              console.error("❌ Order not found:", billNumber);
+            }
+          } catch (error) {
+            console.error("❌ Error uploading image:", error);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // 🔹 Full Image Modal Functions
+    function openModal(imageUrl) {
+      document.getElementById("fullImage").src = imageUrl;
+      document.getElementById("imageModal").style.display = "flex";
+    }
+    function closeModal() {
+      document.getElementById("imageModal").style.display = "none";
+    }
+
+    window.onload = loadHistory;
+  </script>
+  <div class="footers">
+    <p>
+      Created By Yusuf Khan 
+    </p>
+  </div>
+</body>
+</html>
